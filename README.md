@@ -13,7 +13,7 @@
 
 ## 运行界面
 
-[![HADC6A.png](https://s4.ax1x.com/2022/02/02/HADC6A.png)](https://imgtu.com/i/HADC6A)
+[![HEnJdP.png](https://s4.ax1x.com/2022/02/02/HEnJdP.png)](https://imgtu.com/i/HEnJdP)
 
 ## 不够完善的地方
 
