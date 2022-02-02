@@ -13,7 +13,7 @@ logging.basicConfig(filename='./logs/'+time.strftime('%Y%m%d',time.localtime(tim
 # logging.basicConfig(filename='./logs/my.log', level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT, encoding='utf-8')
 # print(time.strftime('%Y%m%d',time.localtime(time.time())))
 
-VERSION = '0.0.1'
+VERSION = '0.0.2'
 
 STOP_ICON = '🔴'
 START_ICON = '🟢'
@@ -96,22 +96,22 @@ class AwesomeStatusBarApp(rumps.App):
         self.menu.add(rumps.MenuItem(title='重启所有', callback=self.restartAll, key='r'))
         self.menu.add(rumps.separator)
         self.menu.add(rumps.MenuItem(title='配置直达'))
-        self.menu.add(rumps.MenuItem(title='httpd', callback=self.Configure))
-        self.menu.add(rumps.MenuItem(title='PHP', callback=self.Configure))
-        self.menu.add(rumps.MenuItem(title='MySQL', callback=self.Configure))
-        self.menu.add(rumps.MenuItem(title='Redis', callback=self.Configure))
+        self.menu.add(rumps.MenuItem(title='📂httpd', callback=self.Configure))
+        self.menu.add(rumps.MenuItem(title='📂PHP', callback=self.Configure))
+        self.menu.add(rumps.MenuItem(title='📝MySQL', callback=self.Configure))
+        self.menu.add(rumps.MenuItem(title='📝Redis', callback=self.Configure))
         self.menu.add(rumps.separator)
         self.menu.add(rumps.MenuItem(title='关于', callback=self.about))
         self.menu.add(rumps.separator)
     
     def Configure(self, sender):
-        if sender.title =='httpd':
+        if sender.title =='📂httpd':
             subprocess.call(['open', '/opt/homebrew/etc/httpd'])
-        if sender.title =='PHP':
+        if sender.title =='📂PHP':
             subprocess.call(['open', '/opt/homebrew/etc/php/7.4'])
-        if sender.title =='MySQL':
+        if sender.title =='📝MySQL':
             subprocess.call(['open', '/opt/homebrew/etc/my.cnf'])
-        if sender.title =='Redis':
+        if sender.title =='📝Redis':
             subprocess.call(['open', '/opt/homebrew/etc/redis.conf'])
 
     def httpd(self, sender):
@@ -335,7 +335,7 @@ class AwesomeStatusBarApp(rumps.App):
         self.menu['Redis'].title = START_ICON + 'Redis'
 
     def about(self, sender):
-        rumps.alert('作者：张雷\n编译日期：2022年2月1日')
+        rumps.alert('作者：张雷\n编译日期：2022年2月2日')
         #rumps.quit_application(sender)#退出
 
 
