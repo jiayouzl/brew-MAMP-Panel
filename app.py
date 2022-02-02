@@ -100,6 +100,7 @@ class AwesomeStatusBarApp(rumps.App):
         self.menu.add(rumps.MenuItem(title='📂PHP', callback=self.Configure))
         self.menu.add(rumps.MenuItem(title='📝MySQL', callback=self.Configure))
         self.menu.add(rumps.MenuItem(title='📝Redis', callback=self.Configure))
+        self.menu.add(rumps.MenuItem(title='📝Hosts', callback=self.Configure))
         self.menu.add(rumps.separator)
         self.menu.add(rumps.MenuItem(title='关于', callback=self.about))
         self.menu.add(rumps.separator)
@@ -113,6 +114,8 @@ class AwesomeStatusBarApp(rumps.App):
             subprocess.call(['open', '/opt/homebrew/etc/my.cnf'])
         if sender.title =='📝Redis':
             subprocess.call(['open', '/opt/homebrew/etc/redis.conf'])
+        if sender.title =='📝Hosts':
+            subprocess.call(['open', '/private/etc/hosts'])
 
     def httpd(self, sender):
         global SERVE_HTTPD_STATA
