@@ -13,7 +13,7 @@ logging.basicConfig(filename='./logs/'+time.strftime('%Y%m%d',time.localtime(tim
 # logging.basicConfig(filename='./logs/my.log', level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT, encoding='utf-8')
 # print(time.strftime('%Y%m%d',time.localtime(time.time())))
 
-VERSION = '0.0.2'
+VERSION = '0.0.3'
 
 STOP_ICON = '🔴'
 START_ICON = '🟢'
