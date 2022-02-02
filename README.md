@@ -2,7 +2,7 @@
 
 我个人还是比较喜欢将PHP开发环境在本地进行的，服务器部署还是首选docker。
 
-由于刚从Windows转MacOS用Homebrew安装了apache2，php，mysql，redis后发现没可视化控制面板实在不方便。
+由于刚从Windows转MacOS用Homebrew安装了apache2，php，mysql，redis后发现没可视化控制面板实在不方便，MAMP PRO好用但正版太贵了，也没有买断。
 后来在网上找了到款LaunchRocket看介绍都很不错，结果发现作者已经8年不维护了，已经不兼容新版Homebrew安装PHP运行环境的控制了。
 
 索性自己趁着过年空闲时间自己做一款吧，就有了大家现在见到的《brew MAMP Panel》。
