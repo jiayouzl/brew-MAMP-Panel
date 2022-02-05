@@ -13,7 +13,7 @@ logging.basicConfig(filename='./logs/'+time.strftime('%Y%m%d',time.localtime(tim
 # logging.basicConfig(filename='./logs/my.log', level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT, encoding='utf-8')
 # print(time.strftime('%Y%m%d',time.localtime(time.time())))
 
-VERSION = '0.0.3'
+VERSION = '0.0.4'
 
 STOP_ICON = '🔴'
 START_ICON = '🟢'
@@ -100,7 +100,7 @@ class AwesomeStatusBarApp(rumps.App):
         self.menu.add(rumps.MenuItem(title='📂PHP', callback=self.Configure))
         self.menu.add(rumps.MenuItem(title='📝MySQL', callback=self.Configure))
         self.menu.add(rumps.MenuItem(title='📝Redis', callback=self.Configure))
-        self.menu.add(rumps.MenuItem(title='📝Hosts', callback=self.Configure))
+        self.menu.add(rumps.MenuItem(title='📂Hosts', callback=self.Configure))
         self.menu.add(rumps.separator)
         self.menu.add(rumps.MenuItem(title='关于', callback=self.about))
         self.menu.add(rumps.separator)
@@ -114,8 +114,8 @@ class AwesomeStatusBarApp(rumps.App):
             subprocess.call(['open', '/opt/homebrew/etc/my.cnf'])
         if sender.title =='📝Redis':
             subprocess.call(['open', '/opt/homebrew/etc/redis.conf'])
-        if sender.title =='📝Hosts':
-            subprocess.call(['open', '/private/etc/hosts'])
+        if sender.title =='📂Hosts':
+            subprocess.call(['open', '/private/etc'])
 
     def httpd(self, sender):
         global SERVE_HTTPD_STATA
