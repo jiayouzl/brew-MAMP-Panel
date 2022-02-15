@@ -5,15 +5,16 @@ import time
 import rumps
 import logging
 import subprocess
+import pyperclip
 
 #配置日志
 LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
 DATE_FORMAT = "%m/%d/%Y %H:%M:%S %p"
-logging.basicConfig(filename='./logs/'+time.strftime('%Y%m%d',time.localtime(time.time()))+'.log', level=logging.DEBUG, format=LOG_FORMAT, encoding='utf-8')
+logging.basicConfig(filename='./logs/' + time.strftime('%Y%m%d', time.localtime(time.time())) + '.log', level=logging.DEBUG, format=LOG_FORMAT, encoding='utf-8')
 # logging.basicConfig(filename='./logs/my.log', level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT, encoding='utf-8')
 # print(time.strftime('%Y%m%d',time.localtime(time.time())))
 
-VERSION = '0.0.4'
+VERSION = '0.0.5'
 
 STOP_ICON = '🔴'
 START_ICON = '🟢'
@@ -40,7 +41,7 @@ SERVE_REDIS_STATA = ''
 # logging.info('brew path:%s', BREW_PATH)
 # print(BREW_PATH)
 
-state = subprocess.Popen(BREW_PATH + " services list",shell=True,stdout=subprocess.PIPE)
+state = subprocess.Popen(BREW_PATH + " services list", shell=True, stdout=subprocess.PIPE)
 state.wait()
 for line in state.stdout.readlines()[1:]:
     result = str(line, 'utf-8').split()
@@ -64,6 +65,7 @@ for line in state.stdout.readlines()[1:]:
         logging.info('Redis NAME:%s  Redis STATA:%s', result[0], result[1])
     else:
         logging.warning('无法识别:%s', result[0])
+
 
 class AwesomeStatusBarApp(rumps.App):
 
@@ -102,25 +104,27 @@ class AwesomeStatusBarApp(rumps.App):
         self.menu.add(rumps.MenuItem(title='📝Redis', callback=self.Configure))
         self.menu.add(rumps.MenuItem(title='📂Hosts', callback=self.Configure))
         self.menu.add(rumps.separator)
+        self.menu.add(rumps.MenuItem(title='🔢取剪切板文本长度', callback=self.textLen))
+        self.menu.add(rumps.separator)
         self.menu.add(rumps.MenuItem(title='关于', callback=self.about))
         self.menu.add(rumps.separator)
-    
+
     def Configure(self, sender):
-        if sender.title =='📂httpd':
+        if sender.title == '📂httpd':
             subprocess.call(['open', '/opt/homebrew/etc/httpd'])
-        if sender.title =='📂PHP':
+        if sender.title == '📂PHP':
             subprocess.call(['open', '/opt/homebrew/etc/php/7.4'])
-        if sender.title =='📝MySQL':
+        if sender.title == '📝MySQL':
             subprocess.call(['open', '/opt/homebrew/etc/my.cnf'])
-        if sender.title =='📝Redis':
+        if sender.title == '📝Redis':
             subprocess.call(['open', '/opt/homebrew/etc/redis.conf'])
-        if sender.title =='📂Hosts':
+        if sender.title == '📂Hosts':
             subprocess.call(['open', '/private/etc'])
 
     def httpd(self, sender):
         global SERVE_HTTPD_STATA
         if SERVE_HTTPD_STATA == 'none':
-            httpdState = subprocess.Popen(BREW_PATH + " services start " + SERVE_HTTPD_NAME,shell=True,stdout=subprocess.PIPE)
+            httpdState = subprocess.Popen(BREW_PATH + " services start " + SERVE_HTTPD_NAME, shell=True, stdout=subprocess.PIPE)
             httpdState.wait()
             for line in httpdState.stdout.readlines():
                 r = str(line, 'utf-8')
@@ -133,7 +137,7 @@ class AwesomeStatusBarApp(rumps.App):
                     logging.error('httpd启动失败:' + r)
                     rumps.alert('httpd启动失败，请查找原因。')
         else:
-            httpdState = subprocess.Popen(BREW_PATH + " services stop " + SERVE_HTTPD_NAME,shell=True,stdout=subprocess.PIPE)
+            httpdState = subprocess.Popen(BREW_PATH + " services stop " + SERVE_HTTPD_NAME, shell=True, stdout=subprocess.PIPE)
             for line in httpdState.stdout.readlines()[1:]:
                 r = str(line, 'utf-8')
                 if r.find('Successfully') != -1:
@@ -148,7 +152,7 @@ class AwesomeStatusBarApp(rumps.App):
     def php(self, sender):
         global SERVE_PHP_STATA
         if SERVE_PHP_STATA == 'none':
-            phpState = subprocess.Popen(BREW_PATH + " services start " + SERVE_PHP_NAME,shell=True,stdout=subprocess.PIPE)
+            phpState = subprocess.Popen(BREW_PATH + " services start " + SERVE_PHP_NAME, shell=True, stdout=subprocess.PIPE)
             phpState.wait()
             for line in phpState.stdout.readlines():
                 r = str(line, 'utf-8')
@@ -161,7 +165,7 @@ class AwesomeStatusBarApp(rumps.App):
                     logging.error('PHP启动失败:' + r)
                     rumps.alert('PHP启动失败，请查找原因。')
         else:
-            phpState = subprocess.Popen(BREW_PATH + " services stop " + SERVE_PHP_NAME,shell=True,stdout=subprocess.PIPE)
+            phpState = subprocess.Popen(BREW_PATH + " services stop " + SERVE_PHP_NAME, shell=True, stdout=subprocess.PIPE)
             for line in phpState.stdout.readlines()[1:]:
                 r = str(line, 'utf-8')
                 if r.find('Successfully') != -1:
@@ -176,7 +180,7 @@ class AwesomeStatusBarApp(rumps.App):
     def mysql(self, sender):
         global SERVE_MYSQL_STATA
         if SERVE_MYSQL_STATA == 'none':
-            mysqlState = subprocess.Popen(BREW_PATH + " services start " + SERVE_MYSQL_NAME,shell=True,stdout=subprocess.PIPE)
+            mysqlState = subprocess.Popen(BREW_PATH + " services start " + SERVE_MYSQL_NAME, shell=True, stdout=subprocess.PIPE)
             mysqlState.wait()
             for line in mysqlState.stdout.readlines():
                 r = str(line, 'utf-8')
@@ -189,7 +193,7 @@ class AwesomeStatusBarApp(rumps.App):
                     logging.error('MySQL启动失败:' + r)
                     rumps.alert('MySQL启动失败，请查找原因。')
         else:
-            mysqlState = subprocess.Popen(BREW_PATH + " services stop " + SERVE_MYSQL_NAME,shell=True,stdout=subprocess.PIPE)
+            mysqlState = subprocess.Popen(BREW_PATH + " services stop " + SERVE_MYSQL_NAME, shell=True, stdout=subprocess.PIPE)
             for line in mysqlState.stdout.readlines()[1:]:
                 r = str(line, 'utf-8')
                 if r.find('Successfully') != -1:
@@ -204,7 +208,7 @@ class AwesomeStatusBarApp(rumps.App):
     def redis(self, sender):
         global SERVE_REDIS_STATA
         if SERVE_REDIS_STATA == 'none':
-            redisState = subprocess.Popen(BREW_PATH + " services start " + SERVE_REDIS_NAME,shell=True,stdout=subprocess.PIPE)
+            redisState = subprocess.Popen(BREW_PATH + " services start " + SERVE_REDIS_NAME, shell=True, stdout=subprocess.PIPE)
             redisState.wait()
             for line in redisState.stdout.readlines():
                 r = str(line, 'utf-8')
@@ -217,7 +221,7 @@ class AwesomeStatusBarApp(rumps.App):
                     logging.error('Redis启动失败:' + r)
                     rumps.alert('Redis启动失败，请查找原因。')
         else:
-            redisState = subprocess.Popen(BREW_PATH + " services stop " + SERVE_REDIS_NAME,shell=True,stdout=subprocess.PIPE)
+            redisState = subprocess.Popen(BREW_PATH + " services stop " + SERVE_REDIS_NAME, shell=True, stdout=subprocess.PIPE)
             for line in redisState.stdout.readlines()[1:]:
                 r = str(line, 'utf-8')
                 if r.find('Successfully') != -1:
@@ -238,28 +242,28 @@ class AwesomeStatusBarApp(rumps.App):
         print('你点击了启动所有')
         if SERVE_HTTPD_STATA == 'none':
             print('正在启动httpd')
-            state = subprocess.Popen(BREW_PATH + " services start " + SERVE_HTTPD_NAME,shell=True,stdout=subprocess.PIPE)
+            state = subprocess.Popen(BREW_PATH + " services start " + SERVE_HTTPD_NAME, shell=True, stdout=subprocess.PIPE)
             state.wait()
             SERVE_HTTPD_STATA = 'started'
             logging.info('启动所有正在启动httpd')
             self.menu['httpd'].title = START_ICON + 'httpd'
         if SERVE_PHP_STATA == 'none':
             print('正在启动PHP')
-            state = subprocess.Popen(BREW_PATH + " services start " + SERVE_PHP_NAME,shell=True,stdout=subprocess.PIPE)
+            state = subprocess.Popen(BREW_PATH + " services start " + SERVE_PHP_NAME, shell=True, stdout=subprocess.PIPE)
             state.wait()
             SERVE_PHP_STATA = 'started'
             logging.info('启动所有正在启动php')
             self.menu['PHP'].title = START_ICON + 'PHP'
         if SERVE_MYSQL_STATA == 'none':
             print('正在启动MySQL')
-            state = subprocess.Popen(BREW_PATH + " services start " + SERVE_MYSQL_NAME,shell=True,stdout=subprocess.PIPE)
+            state = subprocess.Popen(BREW_PATH + " services start " + SERVE_MYSQL_NAME, shell=True, stdout=subprocess.PIPE)
             state.wait()
             SERVE_MYSQL_STATA = 'started'
             logging.info('启动所有正在启动mysql')
             self.menu['MySQL'].title = START_ICON + 'MySQL'
         if SERVE_REDIS_STATA == 'none':
             print('正在启动Redis')
-            state = subprocess.Popen(BREW_PATH + " services start " + SERVE_REDIS_NAME,shell=True,stdout=subprocess.PIPE)
+            state = subprocess.Popen(BREW_PATH + " services start " + SERVE_REDIS_NAME, shell=True, stdout=subprocess.PIPE)
             state.wait()
             SERVE_REDIS_STATA = 'started'
             logging.info('启动所有正在启动redis')
@@ -274,28 +278,28 @@ class AwesomeStatusBarApp(rumps.App):
         print('你点击了停止所有')
         if SERVE_HTTPD_STATA == 'started':
             print('正在停止httpd')
-            state = subprocess.Popen(BREW_PATH + " services stop " + SERVE_HTTPD_NAME,shell=True,stdout=subprocess.PIPE)
+            state = subprocess.Popen(BREW_PATH + " services stop " + SERVE_HTTPD_NAME, shell=True, stdout=subprocess.PIPE)
             state.wait()
             SERVE_HTTPD_STATA = 'none'
             logging.info('停止所有正在停止httpd')
             self.menu['httpd'].title = STOP_ICON + 'httpd'
         if SERVE_PHP_STATA == 'started':
             print('正在停止PHP')
-            state = subprocess.Popen(BREW_PATH + " services stop " + SERVE_PHP_NAME,shell=True,stdout=subprocess.PIPE)
+            state = subprocess.Popen(BREW_PATH + " services stop " + SERVE_PHP_NAME, shell=True, stdout=subprocess.PIPE)
             state.wait()
             SERVE_PHP_STATA = 'none'
             logging.info('停止所有正在停止php')
             self.menu['PHP'].title = STOP_ICON + 'PHP'
         if SERVE_MYSQL_STATA == 'started':
             print('正在停止MySQL')
-            state = subprocess.Popen(BREW_PATH + " services stop " + SERVE_MYSQL_NAME,shell=True,stdout=subprocess.PIPE)
+            state = subprocess.Popen(BREW_PATH + " services stop " + SERVE_MYSQL_NAME, shell=True, stdout=subprocess.PIPE)
             state.wait()
             SERVE_MYSQL_STATA = 'none'
             logging.info('停止所有正在停止mysql')
             self.menu['MySQL'].title = STOP_ICON + 'MySQL'
         if SERVE_REDIS_STATA == 'started':
             print('正在停止Redis')
-            state = subprocess.Popen(BREW_PATH + " services stop " + SERVE_REDIS_NAME,shell=True,stdout=subprocess.PIPE)
+            state = subprocess.Popen(BREW_PATH + " services stop " + SERVE_REDIS_NAME, shell=True, stdout=subprocess.PIPE)
             state.wait()
             SERVE_REDIS_STATA = 'none'
             logging.info('停止所有正在停止redis')
@@ -310,35 +314,40 @@ class AwesomeStatusBarApp(rumps.App):
         print('你点击了重启所有')
 
         print('正在重启httpd')
-        state = subprocess.Popen(BREW_PATH + " services start " + SERVE_HTTPD_NAME,shell=True,stdout=subprocess.PIPE)
+        state = subprocess.Popen(BREW_PATH + " services start " + SERVE_HTTPD_NAME, shell=True, stdout=subprocess.PIPE)
         state.wait()
         SERVE_HTTPD_STATA = 'started'
         logging.info('重启所有正在重启httpd')
         self.menu['httpd'].title = START_ICON + 'httpd'
 
         print('正在重启PHP')
-        state = subprocess.Popen(BREW_PATH + " services start " + SERVE_PHP_NAME,shell=True,stdout=subprocess.PIPE)
+        state = subprocess.Popen(BREW_PATH + " services start " + SERVE_PHP_NAME, shell=True, stdout=subprocess.PIPE)
         state.wait()
         SERVE_PHP_STATA = 'started'
         logging.info('重启所有正在重启php')
         self.menu['PHP'].title = START_ICON + 'PHP'
 
         print('正在重启MySQL')
-        state = subprocess.Popen(BREW_PATH + " services start " + SERVE_MYSQL_NAME,shell=True,stdout=subprocess.PIPE)
+        state = subprocess.Popen(BREW_PATH + " services start " + SERVE_MYSQL_NAME, shell=True, stdout=subprocess.PIPE)
         state.wait()
         SERVE_MYSQL_STATA = 'started'
         logging.info('重启所有正在重启mysql')
         self.menu['MySQL'].title = START_ICON + 'MySQL'
 
         print('正在重启Redis')
-        state = subprocess.Popen(BREW_PATH + " services start " + SERVE_REDIS_NAME,shell=True,stdout=subprocess.PIPE)
+        state = subprocess.Popen(BREW_PATH + " services start " + SERVE_REDIS_NAME, shell=True, stdout=subprocess.PIPE)
         state.wait()
         SERVE_REDIS_STATA = 'started'
         logging.info('重启所有正在重启redis')
         self.menu['Redis'].title = START_ICON + 'Redis'
 
+    def textLen(self, sender):
+        """获取剪贴板数据"""
+        data = pyperclip.paste()
+        rumps.alert('剪切板长度：' + str(len(data)))
+
     def about(self, sender):
-        rumps.alert('作者：张雷\n编译日期：2022年2月2日')
+        rumps.alert('作者：张雷\n编译日期：2022年2月16日')
         #rumps.quit_application(sender)#退出
 
 

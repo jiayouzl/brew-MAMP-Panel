@@ -1,2 +1,2 @@
+pyperclip==1.8.2
 rumps==0.3.0
-setuptools==60.5.0
