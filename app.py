@@ -41,6 +41,9 @@ SERVE_REDIS_STATA = ''
 # logging.info('brew path:%s', BREW_PATH)
 # print(BREW_PATH)
 
+#延迟2秒加载程序,防止开机启动加载过快导致services list读取错误.
+time.sleep(2)
+
 state = subprocess.Popen(BREW_PATH + " services list", shell=True, stdout=subprocess.PIPE)
 state.wait()
 for line in state.stdout.readlines()[1:]:
