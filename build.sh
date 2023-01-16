@@ -2,4 +2,4 @@ rm -rf build
 rm -rf dist
 rm -rf logs
 mkdir logs
-python3 setup.py py2app
+python3.9 setup.py py2app

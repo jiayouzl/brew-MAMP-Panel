@@ -1,2 +1,3 @@
 pyperclip==1.8.2
-rumps==0.3.0
+rumps==0.4.0
+py2app==0.28.5

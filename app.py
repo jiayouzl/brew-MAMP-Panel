@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 #-*- coding: UTF-8 -*-
 
 import time
@@ -14,7 +13,7 @@ logging.basicConfig(filename='./logs/' + time.strftime('%Y%m%d', time.localtime(
 # logging.basicConfig(filename='./logs/my.log', level=logging.DEBUG, format=LOG_FORMAT, datefmt=DATE_FORMAT, encoding='utf-8')
 # print(time.strftime('%Y%m%d',time.localtime(time.time())))
 
-VERSION = '0.0.5'
+VERSION = '0.0.6'
 
 STOP_ICON = '🔴'
 START_ICON = '🟢'
@@ -116,7 +115,7 @@ class AwesomeStatusBarApp(rumps.App):
         if sender.title == '📂httpd':
             subprocess.call(['open', '/opt/homebrew/etc/httpd'])
         if sender.title == '📂PHP':
-            subprocess.call(['open', '/opt/homebrew/etc/php/7.4'])
+            subprocess.call(['open', '/opt/homebrew/etc/php'])
         if sender.title == '📝MySQL':
             subprocess.call(['open', '/opt/homebrew/etc/my.cnf'])
         if sender.title == '📝Redis':
@@ -350,7 +349,7 @@ class AwesomeStatusBarApp(rumps.App):
         rumps.alert('剪切板长度：' + str(len(data)))
 
     def about(self, sender):
-        rumps.alert('作者：张雷\n编译日期：2022年2月16日')
+        rumps.alert('作者：张雷\n编译日期：2023年1月16日')
         #rumps.quit_application(sender)#退出
 
 
